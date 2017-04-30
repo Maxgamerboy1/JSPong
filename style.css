@@ -1,0 +1,11 @@
+
+h2{
+	text-align: center;
+}
+
+canvas{
+	display: block;
+	margin: auto;
+	border: 1px solid #000;
+	background-color: #353535;
+}
