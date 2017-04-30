@@ -1,14 +1,39 @@
-	<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-		<meta content="utf-8" http-equiv="encoding">
-		<title>Game - title</title>
-		<link rel="stylesheet" href="style.css">
-	</head>
-	<body>
-		<h2> Game - title here </h2>
+
+<head>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<title>Thomas - Pong</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="pageLoad()">
+	<h2>Pong</h2>
+	<div id="divMenu">
+		Difficulty...
+		<ul>
+			<li onclick="StartGame(1);">
+				Easy
+			</li>
+			<li onclick="StartGame(7);">
+				Normal
+			</li>
+			<li onclick="StartGame(11);">
+				Hard
+			</li>
+		</ul>
+	</div>
+	<div id="divPlayArea">
 		<canvas id="canvas" width="800" height="400"></canvas>
-		<script src="pong.js"></script>
-	</body>
+	</div>
+	<div id="divPlayerOneWinScreen">
+		PLAYER ONE WINS!!!!!!!!
+	</div>
+	<div id="divPlayerTwoWinScreen">
+		PLAYER TWO WINS!!!!!!!!
+	</div>
+	<script src="pong.js"></script>
+</body>
+
 </html>

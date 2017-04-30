@@ -1,4 +1,14 @@
 "use strict";
+var menu = document.getElementById("divMenu"),
+	playArea = document.getElementById("divPlayArea"),
+	pOneWinScreen = document.getElementById("divPlayerOneWinScreen"),
+	pTwoWinScreen = document.getElementById("divPlayerTwoWinScreen");
+function pageLoad () {
+	menu.style.display = "block";
+	playArea.style.display = "none";
+	pOneWinScreen.style.display = "none";
+	pTwoWinScreen.style.display = "none";
+}
 
 //Controller
 var gameObject = (function () {
@@ -47,14 +57,16 @@ var gameObject = (function () {
 		}
 	}
 
-	var canvas = document.getElementById('canvas'),
+	var BASE_DIFFICULTY = 15,
+		canvas = document.getElementById('canvas'),
 		context = canvas.getContext('2d'),
+		continueGame = true,
 		currentPlayer1Pos = 170,
 		height = canvas.height,
 		playerOneScore = 0,
 		playerTwoScore = 0,
 		playerSkill = 1,
-		difficulty = 0,
+		gameDifficulty = 0,
 		rendered = 0,
 		width = canvas.width,
 		barrier_top = new Barrier(0, 30),
@@ -65,14 +77,21 @@ var gameObject = (function () {
 		api = {
 			keyboard_input: keyboard_input,
 			rerenderGameObjects: rerenderGameObjects,
+			setDifficulty: setDifficulty,
+			stop: stop,
 			update: update
 		};
 
+	
 	function checkScore() {
 		if (playerOneScore > 5) {
-			alert("Player 1 Wins!!!");
+			stop();
+			playArea.style.display = "none";
+			pOneWinScreen.style.display = "block";
 		} else if (playerTwoScore > 5) {
-			alert("Player 2 Wins!!!");
+			stop();
+			playArea.style.display = "none";
+			pTwoWinScreen.style.display = "block";
 		}
 		resetGame();
 	}
@@ -130,13 +149,22 @@ var gameObject = (function () {
 
 	function resetGame() {
 		ball.x_position = width * 0.5; // position in pixels
+		ball.y_position = height * 0.5; // position in pixels
 		ball.x_speed = 2;
 		ball.y_speed = 2;
-		playerSkill = 1;
+		playerSkill = BASE_DIFFICULTY;
+	}
+
+	function setDifficulty(difficulty) {
+		gameDifficulty = Number(difficulty);
+	}
+
+	function stop() {
+		continueGame = false;
 	}
 
 	function trackBall() {
-		player_2.y_position = ball.y_position - (player_2.height / 2) + playerSkill;
+		player_2.y_position = (ball.y_position - (player_2.height / 2)) + (playerSkill > 0 ? playerSkill : playerSkill *-1);
 		if (player_2.y_position < barrier_top.y_position) {
 			player_2.y_position = barrier_top.y_position;
 		} else if (player_2.y_position > barrier_bottom.y_position - player_2.height) {
@@ -147,6 +175,7 @@ var gameObject = (function () {
 	function update() {
 		//Player 1 movement
 		player_1.y_position = currentPlayer1Pos;
+		/*For testing difficulty scaling....*/ player_1.y_position = ball.y_position - 10;
 
 		//Player 2 movement and ball tracking
 		trackBall();
@@ -177,7 +206,7 @@ var gameObject = (function () {
 				ball.x_speed *= -1.2;
 				//PLayer skill detirmines how accurate the CPU is therefore,
 				//the closer to 0, the harder it gets.
-				playerSkill += (playerSkill < 0) ? (-12 + difficulty) : (12 - difficulty);
+				playerSkill += (playerSkill < 0) ? (-BASE_DIFFICULTY + gameDifficulty) : (BASE_DIFFICULTY - gameDifficulty);
 		}
 
 		//Check for PlayerTwo's paddle collision with ball
@@ -187,20 +216,24 @@ var gameObject = (function () {
 				ball.x_speed *= -1.2;
 		}
 
-		gameObject.rerenderGameObjects();
-
-		window.requestAnimationFrame(update); //ask browser to call this function again, when it's ready	
+		if (continueGame) {
+			gameObject.rerenderGameObjects();
+			window.requestAnimationFrame(update); //ask browser to call this function again, when it's ready	
+		}
 	}
 
 	return api;
 }());
 
-// main game loop
-function main() {
+//StartGame
+function StartGame(difficulty) {
+	menu.style.display = "none";
+	playArea.style.display = "block";
+	
+	gameObject.setDifficulty(difficulty)
 	gameObject.rerenderGameObjects();
 	gameObject.update(); //update the game based on elapsed time
 
 }
 
 window.addEventListener("keydown", gameObject.keyboard_input); // listen to keyboard button press
-main();
