@@ -21,6 +21,7 @@ var gameObject = (function () {
 			this.width = 5; // width in pixels
 			this.height = 50; // height in pixels
 			this.y_speed = 5;
+			this.fillStyle;
 		}
 
 		render() {
@@ -54,6 +55,7 @@ var gameObject = (function () {
 
 		render() {
 			context.fillRect(this.x_position, this.y_position, this.width, this.height); // draw paddle
+			//context.fillStyle = 'red';
 		}
 	}
 
@@ -131,9 +133,15 @@ var gameObject = (function () {
 		context.font = "small-caps bold 20px arial";
 		context.fillText(playerOneScore + " VS " + playerTwoScore, 380, 20);
 		context.fillText("Press Escape to reset", 520, 20);
+		
+		context.fillStyle = 'green'; //set colour of players
 		player_1.render();
 		player_2.render();
+		
+		context.fillStyle = 'white'; //set colour of ball back to white
 		ball.render();
+		
+		context.fillStyle = 'red'; //set colour of borders
 		barrier_bottom.render();
 		barrier_top.render();
 	}
