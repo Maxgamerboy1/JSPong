@@ -175,7 +175,7 @@ var gameObject = (function () {
 	function update() {
 		//Player 1 movement
 		player_1.y_position = currentPlayer1Pos;
-		/*For testing difficulty scaling....*/ player_1.y_position = ball.y_position - 10;
+		/*For testing difficulty scaling....*/ //player_1.y_position = ball.y_position - 10;
 
 		//Player 2 movement and ball tracking
 		trackBall();
