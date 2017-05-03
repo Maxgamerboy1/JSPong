@@ -245,3 +245,5 @@ function StartGame(difficulty) {
 }
 
 window.addEventListener("keydown", gameObject.keyboard_input); // listen to keyboard button press
+
+//dick
