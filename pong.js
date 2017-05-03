@@ -129,13 +129,16 @@ var gameObject = (function () {
 		context.fillStyle = 'white'; // set colour of components within the canvas
 		context.clearRect(0, 0, width, height); // clear the canvas
 		context.font = "small-caps bold 20px arial";
-		context.fillText(playerOneScore + " VS " + playerTwoScore, 380, 20);
-		context.fillText("Press Escape to reset", 520, 20);
-		player_1.render();
-		player_2.render();
-		ball.render();
-		barrier_bottom.render();
-		barrier_top.render();
+  		context.fillText(playerOneScore + " VS " + playerTwoScore, 380, 20);
+  		context.fillText("Press Escape to reset", 520, 20);
+ 		context.fillStyle = 'green'; //set colour of players
+  		player_1.render();
+  		player_2.render();
+ 		context.fillStyle = 'white'; //set colour of ball back to white
+  		ball.render();
+ 		context.fillStyle = 'red'; //set colour of borders
+  		barrier_bottom.render();
+  		barrier_top.render();
 	}
 
 	function restartGame() {
