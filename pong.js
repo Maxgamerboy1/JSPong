@@ -131,19 +131,17 @@ var gameObject = (function () {
 		context.fillStyle = 'white'; // set colour of components within the canvas
 		context.clearRect(0, 0, width, height); // clear the canvas
 		context.font = "small-caps bold 20px arial";
-		context.fillText(playerOneScore + " VS " + playerTwoScore, 380, 20);
-		context.fillText("Press Escape to reset", 520, 20);
-		
-		context.fillStyle = 'green'; //set colour of players
-		player_1.render();
-		player_2.render();
-		
-		context.fillStyle = 'white'; //set colour of ball back to white
-		ball.render();
-		
-		context.fillStyle = 'red'; //set colour of borders
-		barrier_bottom.render();
-		barrier_top.render();
+
+  		context.fillText(playerOneScore + " VS " + playerTwoScore, 380, 20);
+  		context.fillText("Press Escape to reset", 520, 20);
+ 		context.fillStyle = 'green'; //set colour of players
+  		player_1.render();
+  		player_2.render();
+ 		context.fillStyle = 'white'; //set colour of ball back to white
+  		ball.render();
+ 		context.fillStyle = 'red'; //set colour of borders
+  		barrier_bottom.render();
+  		barrier_top.render();
 	}
 
 	function restartGame() {
@@ -189,7 +187,7 @@ var gameObject = (function () {
 		trackBall();
 
 		//Speed up the ball
-		ball.x_position -= ball.x_speed;
+		ball.x_position += ball.x_speed;
 		ball.y_position += ball.y_speed;
 
 		//Check for goals
@@ -211,7 +209,15 @@ var gameObject = (function () {
 		if (ball.x_position < (40 + ball.ball_radius) &&
 			ball.y_position >= player_1.y_position &&
 			ball.y_position <= (player_1.y_position + player_1.height)) {
-				ball.x_speed *= -1.2;
+				// Invert ball's x direction
+				ball.x_speed *= -1;
+
+				//increase speed
+				ball.x_speed *= 1.5;
+
+				//Set new scale for YAxis for random incoming angle
+				ball.y_speed *= 1+Math.random();
+
 				//PLayer skill detirmines how accurate the CPU is therefore,
 				//the closer to 0, the harder it gets.
 				playerSkill += (playerSkill < 0) ? (-BASE_DIFFICULTY + gameDifficulty) : (BASE_DIFFICULTY - gameDifficulty);
@@ -221,7 +227,14 @@ var gameObject = (function () {
 		if (ball.x_position > (750 - ball.ball_radius) &&
 			ball.y_position >= player_2.y_position &&
 			ball.y_position <= (player_2.y_position + player_2.height)) {
-				ball.x_speed *= -1.2;
+				// Invert ball's x direction
+				ball.x_speed *= -1;
+
+				//increase speed
+				ball.x_speed *= 1.5;
+
+				//Set new scale for YAxis for random incoming angle
+				ball.y_speed /= 1+Math.random();
 		}
 
 		if (continueGame) {
