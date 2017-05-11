@@ -21,6 +21,7 @@ var gameObject = (function () {
 			this.width = 5; // width in pixels
 			this.height = 50; // height in pixels
 			this.y_speed = 5;
+			this.fillStyle;
 		}
 
 		render() {
@@ -54,8 +55,10 @@ var gameObject = (function () {
 
 		render() {
 			context.fillRect(this.x_position, this.y_position, this.width, this.height); // draw paddle
+			//context.fillStyle = 'red';
 		}
 	}
+	//hello
 
 	var BASE_DIFFICULTY = 15,
 		canvas = document.getElementById('canvas'),
@@ -72,8 +75,8 @@ var gameObject = (function () {
 		barrier_top = new Barrier(0, 30),
 		barrier_bottom = new Barrier(0, 380),
 		ball = new Ball(),
-		player_1 = new Paddle(10, 0),
-		player_2 = new Paddle(780, 0),
+		player_1 = new Paddle(40, 0),
+		player_2 = new Paddle(750, 0),
 		api = {
 			keyboard_input: keyboard_input,
 			rerenderGameObjects: rerenderGameObjects,
@@ -129,6 +132,7 @@ var gameObject = (function () {
 		context.fillStyle = 'white'; // set colour of components within the canvas
 		context.clearRect(0, 0, width, height); // clear the canvas
 		context.font = "small-caps bold 20px arial";
+
   		context.fillText(playerOneScore + " VS " + playerTwoScore, 380, 20);
   		context.fillText("Press Escape to reset", 520, 20);
  		context.fillStyle = 'green'; //set colour of players
@@ -203,7 +207,7 @@ var gameObject = (function () {
 		}
 
 		//Check for PlayerOne's paddle collision with ball
-		if (ball.x_position < (10 + ball.ball_radius) &&
+		if (ball.x_position < (40 + ball.ball_radius) &&
 			ball.y_position >= player_1.y_position &&
 			ball.y_position <= (player_1.y_position + player_1.height)) {
 				// Invert ball's x direction
@@ -221,7 +225,7 @@ var gameObject = (function () {
 		}
 
 		//Check for PlayerTwo's paddle collision with ball
-		if (ball.x_position > (780 - ball.ball_radius) &&
+		if (ball.x_position > (750 - ball.ball_radius) &&
 			ball.y_position >= player_2.y_position &&
 			ball.y_position <= (player_2.y_position + player_2.height)) {
 				// Invert ball's x direction
