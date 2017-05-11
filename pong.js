@@ -58,7 +58,6 @@ var gameObject = (function () {
 			//context.fillStyle = 'red';
 		}
 	}
-	//hello
 
 	var BASE_DIFFICULTY = 15,
 		canvas = document.getElementById('canvas'),
