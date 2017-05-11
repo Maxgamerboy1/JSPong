@@ -74,8 +74,8 @@ var gameObject = (function () {
 		barrier_top = new Barrier(0, 30),
 		barrier_bottom = new Barrier(0, 380),
 		ball = new Ball(),
-		player_1 = new Paddle(10, 0),
-		player_2 = new Paddle(780, 0),
+		player_1 = new Paddle(40, 0),
+		player_2 = new Paddle(750, 0),
 		api = {
 			keyboard_input: keyboard_input,
 			rerenderGameObjects: rerenderGameObjects,
@@ -208,7 +208,7 @@ var gameObject = (function () {
 		}
 
 		//Check for PlayerOne's paddle collision with ball
-		if (ball.x_position < (10 + ball.ball_radius) &&
+		if (ball.x_position < (40 + ball.ball_radius) &&
 			ball.y_position >= player_1.y_position &&
 			ball.y_position <= (player_1.y_position + player_1.height)) {
 				ball.x_speed *= -1.2;
@@ -218,7 +218,7 @@ var gameObject = (function () {
 		}
 
 		//Check for PlayerTwo's paddle collision with ball
-		if (ball.x_position > (780 - ball.ball_radius) &&
+		if (ball.x_position > (750 - ball.ball_radius) &&
 			ball.y_position >= player_2.y_position &&
 			ball.y_position <= (player_2.y_position + player_2.height)) {
 				ball.x_speed *= -1.2;
