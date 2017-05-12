@@ -13,7 +13,7 @@ canvas{
 	background-color: #353535;
 }
 
-#divMenu {
+#divDifficultyMenu, #divCPUMenu {
 	text-align: center;
 }
 

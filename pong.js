@@ -1,10 +1,14 @@
 "use strict";
-var menu = document.getElementById("divMenu"),
+var 
+	difficultyMenu = document.getElementById("divDifficultyMenu"),
+	cpuMenu = document.getElementById("divCPUMenu"),
 	playArea = document.getElementById("divPlayArea"),
 	pOneWinScreen = document.getElementById("divPlayerOneWinScreen"),
 	pTwoWinScreen = document.getElementById("divPlayerTwoWinScreen");
-function pageLoad () {
-	menu.style.display = "block";
+
+function PageLoad () {
+	cpuMenu.style.display = "block";
+	difficultyMenu.style.display = "none";
 	playArea.style.display = "none";
 	pOneWinScreen.style.display = "none";
 	pTwoWinScreen.style.display = "none";
@@ -58,11 +62,14 @@ var gameObject = (function () {
 	}
 
 	var BASE_DIFFICULTY = 15,
+		PADDLE_DISTANCE = 10,
 		canvas = document.getElementById('canvas'),
 		context = canvas.getContext('2d'),
 		continueGame = true,
 		currentPlayer1Pos = 170,
+		currentPlayer2Pos = 170,
 		height = canvas.height,
+		isHuman = false,
 		playerOneScore = 0,
 		playerTwoScore = 0,
 		playerSkill = 1,
@@ -72,17 +79,24 @@ var gameObject = (function () {
 		barrier_top = new Barrier(0, 30),
 		barrier_bottom = new Barrier(0, 380),
 		ball = new Ball(),
-		player_1 = new Paddle(10, 0),
-		player_2 = new Paddle(780, 0),
+		player_1 = new Paddle(PADDLE_DISTANCE, 0),
+		player_2 = new Paddle(width - PADDLE_DISTANCE, 0),
 		api = {
-			keyboard_input: keyboard_input,
+			player_1_keyboard_input: player_1_keyboard_input,
+			player_2_keyboard_input: player_2_keyboard_input,
 			rerenderGameObjects: rerenderGameObjects,
+			setCPU: setCPU,
 			setDifficulty: setDifficulty,
 			stop: stop,
 			update: update
 		};
 
-	
+	function checkEscape(keyCode) {
+		if (keyCode == 27) { //Esc
+			restartGame();
+		}
+	}
+
 	function checkScore() {
 		if (playerOneScore > 5) {
 			stop();
@@ -96,23 +110,40 @@ var gameObject = (function () {
 		resetGame();
 	}
 
-	function keyboard_input(event) {
-		if (event.keyCode == 38) { //Up arrow
+	function player_1_keyboard_input(event) {
+		var keyCode = event.keyCode;
+		if (keyCode == 87) { //W key
 			currentPlayer1Pos = currentPlayer1Pos - 10;
 			if (currentPlayer1Pos < barrier_top.y_position) {
 				currentPlayer1Pos = barrier_top.y_position;
 			}
 		}
-		if (event.keyCode == 40) { //Down arrow
+		if (keyCode == 83) { //S key
 			currentPlayer1Pos = currentPlayer1Pos + 10;
 			if (currentPlayer1Pos > barrier_bottom.y_position - player_1.height) {
 				currentPlayer1Pos = barrier_bottom.y_position - player_1.height;
 			}
 		}
 
-		if (event.keyCode == 27) { //Esc
-			restartGame();
+		checkEscape(keyCode);
+	}
+
+	function player_2_keyboard_input(event) {
+		var keyCode = event.keyCode;
+		if (keyCode == 38) { //Up key
+			currentPlayer2Pos = currentPlayer2Pos - 10;
+			if (currentPlayer2Pos < barrier_top.y_position) {
+				currentPlayer2Pos = barrier_top.y_position;
+			}
 		}
+		if (keyCode == 40) { //Down key
+			currentPlayer2Pos = currentPlayer2Pos + 10;
+			if (currentPlayer2Pos > barrier_bottom.y_position - player_2.height) {
+				currentPlayer2Pos = barrier_bottom.y_position - player_2.height;
+			}
+		}
+
+		checkEscape(keyCode)
 	}
 
 	function playerOneScored() {
@@ -158,6 +189,13 @@ var gameObject = (function () {
 		playerSkill = BASE_DIFFICULTY;
 	}
 
+	function setCPU(areWeHuman) {
+		isHuman = Boolean(areWeHuman);
+		if (isHuman) {
+			StartGame(0);
+		}
+	}
+
 	function setDifficulty(difficulty) {
 		gameDifficulty = Number(difficulty);
 	}
@@ -181,7 +219,11 @@ var gameObject = (function () {
 		/*For testing difficulty scaling....*/ //player_1.y_position = ball.y_position - 10;
 
 		//Player 2 movement and ball tracking
-		trackBall();
+		if (isHuman) {
+			player_2.y_position = currentPlayer2Pos;
+		} else {
+			trackBall();
+		}
 
 		//Speed up the ball
 		ball.x_position -= ball.x_speed;
@@ -203,7 +245,7 @@ var gameObject = (function () {
 		}
 
 		//Check for PlayerOne's paddle collision with ball
-		if (ball.x_position < (10 + ball.ball_radius) &&
+		if (ball.x_position < ((player_1.x_position + player_1.width) + ball.ball_radius) &&
 			ball.y_position >= player_1.y_position &&
 			ball.y_position <= (player_1.y_position + player_1.height)) {
 				ball.x_speed *= -1.2;
@@ -213,7 +255,7 @@ var gameObject = (function () {
 		}
 
 		//Check for PlayerTwo's paddle collision with ball
-		if (ball.x_position > (780 - ball.ball_radius) &&
+		if (ball.x_position > (player_2.x_position - ball.ball_radius) &&
 			ball.y_position >= player_2.y_position &&
 			ball.y_position <= (player_2.y_position + player_2.height)) {
 				ball.x_speed *= -1.2;
@@ -228,9 +270,13 @@ var gameObject = (function () {
 	return api;
 }());
 
+function SetCPU(areWeHuman) {
+	gameObject.setCPU(areWeHuman);
+}
+
 //StartGame
 function StartGame(difficulty) {
-	menu.style.display = "none";
+	difficultyMenu.style.display = "none";
 	playArea.style.display = "block";
 	
 	gameObject.setDifficulty(difficulty)
@@ -239,6 +285,7 @@ function StartGame(difficulty) {
 
 }
 
-window.addEventListener("keydown", gameObject.keyboard_input); // listen to keyboard button press
+window.addEventListener("keydown", gameObject.player_1_keyboard_input); // listen to keyboard button press
+document.addEventListener("keydown", gameObject.player_2_keyboard_input); // listen to keyboard button press
 
 //dick

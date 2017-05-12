@@ -8,9 +8,19 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 
-<body onload="pageLoad()">
+<body onload="PageLoad()">
 	<h2>Pong</h2>
-	<div id="divMenu">
+	<div id="divCPUMenu">
+		<ul>
+			<li onclick="SetCPU(false);">
+				Player 1 VS CPU
+			</li>
+			<li onclick="SetCPU(true);">
+				Player 1 VS Player 2
+			</li>
+		</ul>
+	</div>
+	<div id="divDifficultyMenu">
 		Difficulty...
 		<ul>
 			<li onclick="StartGame(1);">
