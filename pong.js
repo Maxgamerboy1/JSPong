@@ -272,6 +272,8 @@ var gameObject = (function () {
 
 function SetCPU(areWeHuman) {
 	gameObject.setCPU(areWeHuman);
+	cpuMenu.style.display = "none";	
+	difficultyMenu.style.display = "block";
 }
 
 //StartGame
@@ -287,5 +289,3 @@ function StartGame(difficulty) {
 
 window.addEventListener("keydown", gameObject.player_1_keyboard_input); // listen to keyboard button press
 document.addEventListener("keydown", gameObject.player_2_keyboard_input); // listen to keyboard button press
-
-//dick
